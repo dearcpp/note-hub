@@ -1,4 +1,6 @@
 # note-hub
+[![Build Status](https://travis-ci.org/beryll1um/note-hub.svg?branch=master)](https://travis-ci.org/beryll1um/note-hub.svg?branch=master)
+
 Web service for saving and serving your notes.
 
 ## Docs
