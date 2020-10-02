@@ -1,4 +1,3 @@
-# /note/create
 ## Request
 `/note/create`
 ## Body

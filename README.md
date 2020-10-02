@@ -9,5 +9,5 @@ I am briefly documenting the [API usage information](https://github.com/beryll1u
 ## Deploy
 ```bash
 docker build -t note-hub . # container assembly
-docker run -p 8080:8080 -it note-hub . # container launch with port binding
+docker run -dp 8080:8080 -it note-hub . # container launch with port binding
 ```

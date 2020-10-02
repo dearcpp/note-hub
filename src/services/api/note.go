@@ -5,13 +5,12 @@ import (
 	"github.com/beryll1um/note-hub/src/database"
 	"github.com/beryll1um/note-hub/src/models"
 	"github.com/gorilla/mux"
-	"net/http"
 	"strconv"
 )
 
-func hNoteCreate(request *http.Request) Response {
+func hNoteCreate(request Request, user *models.User) Response {
 	var body map[string]interface{}
-	if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+	if err := json.NewDecoder(request.Data.Body).Decode(&body); err != nil {
 		return BadRequest{"text": "failed to parse request body"}
 	}
 
@@ -34,6 +33,7 @@ func hNoteCreate(request *http.Request) Response {
 	note := models.Note{
 		Name:    body["name"].(string),
 		Content: body["content"].(string),
+		Author:  *user,
 	}
 
 	if _, err := database.Controller.Insert(&note); err != nil {
@@ -45,17 +45,21 @@ func hNoteCreate(request *http.Request) Response {
 	}
 }
 
-func hNoteGet(request *http.Request) Response {
+func hNoteGet(request Request, user *models.User) Response {
 	var result int64
 	var err error
 
-	if result, err = strconv.ParseInt(mux.Vars(request)["id"], 10, 64); err != nil {
+	if result, err = strconv.ParseInt(mux.Vars(request.Data)["id"], 10, 64); err != nil {
 		return BadRequest{"text": "bad parameters provided"}
 	}
 
 	var has bool
-	note := models.Note{ID: result}
-	if has, err = database.Controller.Get(&note); !has || err != nil {
+	note := models.Note{
+		ID:     result,
+		Author: *user,
+	}
+
+	if has, err = database.Controller.Get(&note); !has {
 		return BadRequest{"text": "note not found"}
 	}
 

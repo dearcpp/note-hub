@@ -17,6 +17,7 @@ func main() {
 
 	if err := database.Controller.Sync(
 		new(models.Note),
+		new(models.User),
 	); err != nil {
 		log.Fatal("Failed to sync database")
 	}
