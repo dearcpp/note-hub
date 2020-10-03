@@ -67,3 +67,26 @@ func hNoteGet(request Request, user *models.User) Response {
 		"note": note,
 	}
 }
+
+func hNoteDelete(request Request, user *models.User) Response {
+	var result int64
+	var err error
+
+	if result, err = strconv.ParseInt(mux.Vars(request.Data)["id"], 10, 64); err != nil {
+		return BadRequest{"text": "bad parameters provided"}
+	}
+
+	note := models.Note{
+		ID:     result,
+		Author: *user,
+	}
+
+	var affected int64
+	if affected, err = database.Controller.Delete(&note); affected == 0 {
+		return BadRequest{"text": "note not found"}
+	}
+
+	return Success{
+		"text": "successfully deleted",
+	}
+}
