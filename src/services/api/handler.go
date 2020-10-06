@@ -53,6 +53,7 @@ func SetupRouter(router *mux.Router) {
 	router.Handle("/user/sign_in", HandlerFunc(hUserSignIn))
 	router.Handle("/user/sign_up", HandlerFunc(hUserSignUp))
 	router.Handle("/note/create", HandlerFunc(RequiresUser(hNoteCreate)))
+	router.Handle("/note/list", HandlerFunc(RequiresUser(hNoteList)))
 	router.Handle("/note/{id:[0-9]+}/get", HandlerFunc(RequiresUser(hNoteGet)))
 	router.Handle("/note/{id:[0-9]+}/delete", HandlerFunc(RequiresUser(hNoteDelete)))
 }
