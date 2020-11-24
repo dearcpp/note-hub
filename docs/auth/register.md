@@ -1,11 +1,11 @@
 ## Request
-`/user/sign_in`
+`/auth/register`
 ## Body
 ```json
 {
     "mail": "user@mail.com",
-    "password": "password2020"
+    "password": "password"
 }
 ```
 ## Description
-User sign in method.
+User register method.

@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Note struct {
 	ID      int64     `xorm:"'id' autoincr pk" json:"id"`
