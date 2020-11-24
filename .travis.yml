@@ -3,4 +3,4 @@ go:
  - 1.15.x
 
 script:
- - go build ./src/main.go
+ - go build ./cmd/main.go
