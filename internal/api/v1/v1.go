@@ -20,5 +20,5 @@ func Setup(router *mux.Router) {
 	noteRouter.Handle("/{id:[0-9]+}/delete", handler.Func(note.Delete)).Methods("DELETE")
 
 	noteRouter.Use(MiddlewareAuthentication)
-	userRouter.Use(MiddlewareRequestLogger)
+	router.Use(MiddlewareRequestLogger)
 }
