@@ -1,4 +1,4 @@
-package api
+package handler
 
 import (
 	"encoding/json"
@@ -11,9 +11,10 @@ type Response interface {
 }
 
 type (
-	Success      map[string]interface{}
-	BadRequest   map[string]interface{}
-	Unauthorized map[string]interface{}
+	Success             map[string]interface{}
+	BadRequest          map[string]interface{}
+	Unauthorized        map[string]interface{}
+	InternalServerError map[string]interface{}
 )
 
 func (r Success) Result() interface{} {
@@ -46,21 +47,27 @@ func (r Unauthorized) StatusCode() int {
 	return http.StatusUnauthorized
 }
 
-func Marshal(response Response) ([]byte, error) {
-	bytes, err := json.Marshal(response.Result())
-	if err != nil {
-		bytes = []byte("{ \"error\": { \"text\": \"internal server error\" } }")
+func (r InternalServerError) Result() interface{} {
+	return map[string]interface{}{
+		"error": r,
 	}
-	return bytes, err
+}
+
+func (r InternalServerError) StatusCode() int {
+	return http.StatusInternalServerError
 }
 
 func WriteResponse(writer http.ResponseWriter, response Response) {
-	bytes, err := Marshal(response)
 	writer.Header().Set("Content-Type", "application/json")
+
+	bytes, err := json.Marshal(response.Result())
+
 	if err != nil {
+		bytes = []byte("{ \"error\": { \"text\": \"internal server error\" } }")
 		writer.WriteHeader(http.StatusInternalServerError)
 	} else {
 		writer.WriteHeader(response.StatusCode())
 	}
+
 	writer.Write(bytes)
 }

@@ -1,6 +1,7 @@
 language: go
-go: 
- - 1.15.x
+
+go:
+ - 1.16.x
 
 script:
  - go build ./cmd/main.go
