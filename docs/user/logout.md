@@ -1,4 +1,4 @@
 ## Request
-`/auth/logout`
+`/user/logout`
 ## Description
 User logout method.
