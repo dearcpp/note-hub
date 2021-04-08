@@ -8,6 +8,8 @@ import (
 )
 
 func Setup(router *mux.Router) {
+	router.Use(MiddlewareRequestLogger)
+
 	userRouter := router.PathPrefix("/user/").Subrouter()
 	userRouter.Handle("/register", handler.Func(user.Register)).Methods("POST")
 	userRouter.Handle("/login", handler.Func(user.Login)).Methods("POST")
@@ -20,5 +22,4 @@ func Setup(router *mux.Router) {
 	noteRouter.Handle("/{id:[0-9]+}/delete", handler.Func(note.Delete)).Methods("DELETE")
 
 	noteRouter.Use(MiddlewareAuthentication)
-	router.Use(MiddlewareRequestLogger)
 }
