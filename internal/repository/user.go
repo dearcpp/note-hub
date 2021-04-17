@@ -104,7 +104,7 @@ func (user *User) Get() (bool, error) {
 }
 
 func (user *User) Update(data *Note) (int64, error) {
-	return database.Controller.Update(user, data)
+	return database.Controller.Update(data, user)
 }
 
 func (user *User) Delete() (int64, error) {

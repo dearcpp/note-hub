@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := handler.SetupCookieStore("config/session_enc_key.conf"); err != nil {
+	if err := handler.SetupCookieStore("config/session.conf"); err != nil {
 		log.Fatal(err)
 	}
 

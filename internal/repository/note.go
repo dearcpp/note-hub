@@ -16,7 +16,7 @@ func (note *Note) Get() (bool, error) {
 }
 
 func (note *Note) Update(data *Note) (int64, error) {
-	return database.Controller.Update(note, data)
+	return database.Controller.Update(data, note)
 }
 
 func (note *Note) Delete() (int64, error) {
