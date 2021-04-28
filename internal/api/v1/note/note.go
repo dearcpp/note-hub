@@ -58,8 +58,7 @@ func Get(request handler.Request) handler.Response {
 }
 
 func List(request handler.Request) handler.Response {
-	limitString, _ := request.GetQueryVar("limit")
-	limit, err := strconv.ParseUint(limitString[0], 10, 32)
+	limit, err := strconv.ParseUint(request.GetQueryVar("limit")[0], 10, 32)
 	if err != nil {
 		log.Println(err)
 		return handler.BadRequest{
@@ -67,8 +66,7 @@ func List(request handler.Request) handler.Response {
 		}
 	}
 
-	startString, _ := request.GetQueryVar("start")
-	start, err := strconv.ParseUint(startString[0], 10, 32)
+	start, err := strconv.ParseUint(request.GetQueryVar("start")[0], 10, 32)
 	if err != nil {
 		return handler.BadRequest{
 			"text": "required uint32 'start' is missing",

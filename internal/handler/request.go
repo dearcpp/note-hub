@@ -51,9 +51,9 @@ func (request *Request) ParseBody(dst interface{}) error {
 	return nil
 }
 
-func (request *Request) GetQueryVar(key string) ([]string, bool) {
-	array, ok := request.Data.URL.Query()[key]
-	return array, ok
+func (request *Request) GetQueryVar(key string) []string {
+	array, _ := request.Data.URL.Query()[key]
+	return array
 }
 
 func (request *Request) GetMuxVar(key string) string {
