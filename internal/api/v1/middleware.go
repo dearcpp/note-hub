@@ -4,28 +4,38 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/beryll1um/note-hub/internal/handler"
-	"github.com/beryll1um/note-hub/internal/repository"
+	"note-hub/internal/handler"
+	"note-hub/internal/repository"
 )
 
 func MiddlewareAuthentication(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		var user repository.User
-		if err := user.GetFromSession(request); err != nil {
-			handler.WriteResponse(writer, handler.Unauthorized{
-				"text": err.Error(),
+	return handler.Middleware(func(request handler.Request) {
+		session, err := request.GetSession()
+		if err != nil {
+			handler.WriteResponse(request.Writer, handler.InternalServerError{
+				"text": "internal server error",
 			})
-		} else {
-			next.ServeHTTP(writer, request)
+			return
 		}
+
+		var user repository.User
+
+		if err := session.GetUser(&user); err != nil {
+			handler.WriteResponse(request.Writer, handler.Unauthorized{
+				"text": "session has not verified",
+			})
+			return
+		}
+
+		request.Set(handler.User, user)
+
+		next.ServeHTTP(request.Writer, request.Data)
 	})
 }
 
 func MiddlewareRequestLogger(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		method := "[" + request.Method + "]"
-		log.Println(fmt.Sprintf("%s %s", method, request.RequestURI))
-		next.ServeHTTP(writer, request)
+	return handler.Middleware(func(request handler.Request) {
+		log.Println(fmt.Sprintf("[%s] %s", request.Data.Method, request.Data.RequestURI))
+		next.ServeHTTP(request.Writer, request.Data)
 	})
 }

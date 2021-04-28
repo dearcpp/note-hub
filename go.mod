@@ -1,8 +1,9 @@
-module github.com/beryll1um/note-hub
+module note-hub
 
-go 1.15
+go 1.16
 
 require (
+	github.com/google/uuid v1.2.0
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/sessions v1.2.1
 	github.com/joho/godotenv v1.3.0

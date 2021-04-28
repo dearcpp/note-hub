@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"xorm.io/xorm"
 )
@@ -13,10 +12,6 @@ import (
 var Controller *xorm.Engine
 
 func GetConnectionString() (string, error) {
-	if err := godotenv.Load(); err != nil {
-		return "", err
-	}
-
 	var databaseHost string
 	if databaseHost = os.Getenv("POSTGRES_HOST"); databaseHost == "" {
 		return "", errors.New("failed to parse database host from environment")
@@ -56,7 +51,7 @@ func Connect() error {
 		return err
 	}
 
-	Controller, err = xorm.NewEngine("postgres", string(connection))
+	Controller, err = xorm.NewEngine("postgres", connection)
 	if err != nil {
 		return err
 	}
@@ -65,8 +60,5 @@ func Connect() error {
 }
 
 func Close() error {
-	if err := Controller.Close(); err != nil {
-		return err
-	}
-	return nil
+	return Controller.Close()
 }
