@@ -27,7 +27,7 @@ func MiddlewareAuthentication(next http.Handler) http.Handler {
 			return
 		}
 
-		request.Set(handler.User, user)
+		request.SetContextValue(handler.User, user)
 
 		next.ServeHTTP(request.Writer, request.Data)
 	})

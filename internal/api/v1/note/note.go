@@ -23,7 +23,7 @@ func Create(request handler.Request) handler.Response {
 	note := repository.Note{
 		Name:    params.Name,
 		Content: params.Content,
-		Author:  model.User(request.Get(handler.User).(repository.User)),
+		Author:  model.User(request.GetContextValue(handler.User).(repository.User)),
 	}
 
 	if _, err := note.Insert(); err != nil {
@@ -35,8 +35,20 @@ func Create(request handler.Request) handler.Response {
 	}
 }
 
+type GetParameters struct {
+	Id string `clavis:"required max_length(10)"`
+}
+
 func Get(request handler.Request) handler.Response {
-	id, err := strconv.ParseUint(request.GetMuxVar("id"), 10, 32)
+	var params GetParameters
+
+	if err := request.ParseMuxVars(&params); err != nil {
+		return handler.BadRequest{
+			"text": err.Error(),
+		}
+	}
+
+	id, err := strconv.ParseUint(params.Id, 10, 32)
 	if err != nil {
 		return handler.BadRequest{
 			"text": "required uint32 'id' is missing",
@@ -45,7 +57,7 @@ func Get(request handler.Request) handler.Response {
 
 	note := repository.Note{
 		ID:     uint32(id),
-		Author: model.User(request.Get(handler.User).(repository.User)),
+		Author: model.User(request.GetContextValue(handler.User).(repository.User)),
 	}
 
 	if has, _ := note.Get(); !has {
@@ -57,8 +69,21 @@ func Get(request handler.Request) handler.Response {
 	}
 }
 
+type ListParameters struct {
+	Limit string `clavis:"required max_length(10)"`
+	Start string `clavis:"required max_length(10)"`
+}
+
 func List(request handler.Request) handler.Response {
-	limit, err := strconv.ParseUint(request.GetQueryVar("limit")[0], 10, 32)
+	var params ListParameters
+
+	if err := request.ParseQueryVars(&params); err != nil {
+		return handler.BadRequest{
+			"text": err.Error(),
+		}
+	}
+
+	limit, err := strconv.ParseUint(params.Limit, 10, 32)
 	if err != nil {
 		log.Println(err)
 		return handler.BadRequest{
@@ -66,14 +91,14 @@ func List(request handler.Request) handler.Response {
 		}
 	}
 
-	start, err := strconv.ParseUint(request.GetQueryVar("start")[0], 10, 32)
+	start, err := strconv.ParseUint(params.Start, 10, 32)
 	if err != nil {
 		return handler.BadRequest{
 			"text": "required uint32 'start' is missing",
 		}
 	}
 
-	user := request.Get(handler.User).(repository.User)
+	user := request.GetContextValue(handler.User).(repository.User)
 
 	var notes []repository.Note
 
@@ -86,8 +111,20 @@ func List(request handler.Request) handler.Response {
 	}
 }
 
+type DeleteParameters struct {
+	Id string `clavis:"required max_length(10)"`
+}
+
 func Delete(request handler.Request) handler.Response {
-	id, err := strconv.ParseUint(request.GetMuxVar("id"), 10, 32)
+	var params DeleteParameters
+
+	if err := request.ParseMuxVars(&params); err != nil {
+		return handler.BadRequest{
+			"text": err.Error(),
+		}
+	}
+
+	id, err := strconv.ParseUint(params.Id, 10, 32)
 	if err != nil {
 		return handler.BadRequest{
 			"text": "required uint32 'id' is missing",
@@ -96,7 +133,7 @@ func Delete(request handler.Request) handler.Response {
 
 	note := repository.Note{
 		ID:     uint32(id),
-		Author: model.User(request.Get(handler.User).(repository.User)),
+		Author: model.User(request.GetContextValue(handler.User).(repository.User)),
 	}
 
 	if has, _ := note.Get(); !has {
