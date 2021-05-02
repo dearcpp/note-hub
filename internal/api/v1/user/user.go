@@ -7,8 +7,8 @@ import (
 )
 
 type RegisterParameters struct {
-	Email    string `json:"email" clavis:"required max_length(320)"`
-	Password string `json:"password" clavis:"required max_length(128)"`
+	Email    string `json:"email" field:"required max_length(320)"`
+	Password string `json:"password" field:"required max_length(128)"`
 }
 
 func Register(request handler.Request) handler.Response {
@@ -35,8 +35,8 @@ func Register(request handler.Request) handler.Response {
 }
 
 type LoginParameters struct {
-	Email    string `json:"email" clavis:"required max_length(320)"`
-	Password string `json:"password" clavis:"required max_length(128)"`
+	Email    string `json:"email" field:"required max_length(320)"`
+	Password string `json:"password" field:"required max_length(128)"`
 }
 
 func Login(request handler.Request) handler.Response {

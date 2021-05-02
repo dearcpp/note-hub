@@ -25,7 +25,7 @@ type Request struct {
 func parsePostConditions(dst interface{}) error {
 	fields := reflect.ValueOf(dst).Elem()
 	for i := 0; i < fields.NumField(); i++ {
-		tags := fields.Type().Field(i).Tag.Get("clavis")
+		tags := fields.Type().Field(i).Tag.Get("field")
 		for _, tag := range strings.Split(tags, " ") {
 			if tag == "required" && fields.Field(i).IsZero() {
 				fieldName := strings.ToLower(fields.Type().Field(i).Name)

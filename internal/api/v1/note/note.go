@@ -9,8 +9,8 @@ import (
 )
 
 type CreateParameters struct {
-	Name    string `json:"name" clavis:"required max_length(64)"`
-	Content string `json:"content" clavis:"required max_length(256)"`
+	Name    string `json:"name" field:"required max_length(64)"`
+	Content string `json:"content" field:"required max_length(256)"`
 }
 
 func Create(request handler.Request) handler.Response {
@@ -36,7 +36,7 @@ func Create(request handler.Request) handler.Response {
 }
 
 type GetParameters struct {
-	Id string `clavis:"required max_length(10)"`
+	Id string `field:"required max_length(10)"`
 }
 
 func Get(request handler.Request) handler.Response {
@@ -70,8 +70,8 @@ func Get(request handler.Request) handler.Response {
 }
 
 type ListParameters struct {
-	Limit string `clavis:"required max_length(10)"`
-	Start string `clavis:"required max_length(10)"`
+	Limit string `field:"required max_length(10)"`
+	Start string `field:"required max_length(10)"`
 }
 
 func List(request handler.Request) handler.Response {
@@ -112,7 +112,7 @@ func List(request handler.Request) handler.Response {
 }
 
 type DeleteParameters struct {
-	Id string `clavis:"required max_length(10)"`
+	Id string `field:"required max_length(10)"`
 }
 
 func Delete(request handler.Request) handler.Response {
